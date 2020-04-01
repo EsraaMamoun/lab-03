@@ -25,24 +25,27 @@ $(document).ready(function () {
             });
         }).then(() => selectOption());
     };
-
-const readJson2 = () => {
-    $.ajax('data/page-2.json', { method: 'GET', dataType: 'JSON' }).then(data => {
-        data.forEach(items => {
-            let horn = new Gallery(items);
-            horn.render();
-        });
-    }).then(() => selectOption());
-};
-
-let page1 = $('#page1').on('click', function () {
-    $('section').hide();
     readJson1();
-});
-let page2 = $('#page2').on('click', function () {
-    $('section').hide();
+
+    const readJson2 = () => {
+        $.ajax('data/page-2.json', { method: 'GET', dataType: 'JSON' }).then(data => {
+            data.forEach(items => {
+                let horn = new Gallery(items);
+                horn.render();
+            });
+        }).then(() => selectOption());
+    };
     readJson2();
-});
+
+    $('#page1').on('click', function () {
+        $('section').hide();
+        readJson1();
+    });
+
+    $('#page2').on('click', function () {
+        $('section').hide();
+        readJson2();
+    });
 
     let $hornSelect = $('select');
     const selectOption = function () {
@@ -56,5 +59,19 @@ let page2 = $('#page2').on('click', function () {
         let $theSelect = $(this).val();
         $('section').hide();
         $(`.${$theSelect}`).show();
+    });
+
+    const $liSort1 = $('#sort li:first');
+    const $liSort2 = $('#sort li:last');
+
+    $liSort1.on('click', function () {
+        Gallery.all.sort((pic1,pic2) => pic1.title.toLowerCase() > pic2.title.toLowerCase());
+        console.log('sort1');
+        
+    });
+
+    $liSort2.on('click', function () {
+        console.log('sort2');
+        Gallery.all.sort((pic1,pic2) => pic1.horns - pic2.horns);
     });
 });
